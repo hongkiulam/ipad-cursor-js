@@ -54,7 +54,7 @@ The text cursor activates when hovering over any of the following elements: _p,s
 
 ![Text Cursor GIF](./images/text.gif)
 
-Set the `data-cursor` to any element on the page to enable the fill or drag cursor
+Set the `data-cursor` attribute to any element on the page to enable the fill or drag cursor
 
 ![Fill Cursor GIF](./images/fill.gif)
 
