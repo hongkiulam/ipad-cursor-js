@@ -75,6 +75,8 @@ const load = () => {
     $.mouseX = e.clientX;
     $.mouseY = e.clientY;
   });
+  // start animation
+  requestAnimationFrame(onCursorMove);
 };
 
 // main cursor logic here
@@ -140,9 +142,6 @@ const onCursorMove = () => {
   useGeneralCursor();
   nextFrame();
 };
-
-// start animation
-requestAnimationFrame(onCursorMove);
 
 const resetCursor = () => {
   // removes all possible overrides, results in the defaults applied by css stylesheet
