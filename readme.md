@@ -2,6 +2,8 @@
 
 An iPadOS based cursor for the browser
 
+Demo [https://ipad-cursor-js.netlify.app/](https://ipad-cursor-js.netlify.app/)
+
 #### Features
 
 - Circular cursor
@@ -11,13 +13,26 @@ An iPadOS based cursor for the browser
 
 #### Installation
 
+```bash
+npm install ipad-cursor-js
+```
+
+Or add this
+
+```html
+<script
+  type="text/javascript"
+  src="https://cdn.jsdelivr.net/npm/ipad-cursor-js@1.0.1/index.js"
+></script>
+```
+
 #### Usage
 
 **Creating the cursor**
 
 Nothing needs to be done to create a cursor, it is attached to the DOM automatically.
 
-However to customise the cursor, you can add a `<div>` with id `cursor` to the root of you page.
+However to customise the cursor, you can add a `<div>` with id `cursor` to the root of your page.
 
 e.g.
 
@@ -29,7 +44,7 @@ e.g.
 
 `data-h` - Set the height for the general cursor _default: 10px_
 
-`data-bg` - Set the background for the general cursor _default: gray_
+`data-bg` - Set the background for the cursor _default: gray_
 
 **Cursors**
 
@@ -42,11 +57,13 @@ The text cursor activates when hovering over any of the following elements: _p,s
 Set the `data-cursor` to any element on the page to enable the fill or drag cursor
 
 ![Fill Cursor GIF](./images/fill.gif)
+
 ```html
 <button data-cursor="fill">Click me!</button>
 ```
 
 ![Fill Cursor GIF](./images/drag.gif)
+
 ```html
 <button data-cursor="drag">Click me!</button>
 ```

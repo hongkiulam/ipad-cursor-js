@@ -10,12 +10,12 @@ let cursor;
  */
 const $ = {
   // width and height for general cursor
-  baseCursorWidth: 0,
-  baseCursorHeight: 0,
+  baseCursorWidth: "10px",
+  baseCursorHeight: "10px",
   // current width and height and borderRadius, see `onCursorMove`
-  cursorWidth: 0,
-  cursorHeight: 0,
-  borderRadius: 0,
+  cursorWidth: "10px",
+  cursorHeight: "10px",
+  borderRadius: "0px",
   // current mouse position on page
   mouseX: 0,
   mouseY: 0,
@@ -80,6 +80,7 @@ const load = () => {
 // main cursor logic here
 const onCursorMove = () => {
   const nextFrame = () => requestAnimationFrame(onCursorMove);
+  if (!cursor) return nextFrame();
   // on every frame, we update the cursor based on our app state
   cursor.style.width = $.cursorWidth;
   cursor.style.height = $.cursorHeight;
