@@ -94,10 +94,29 @@ const onCursorMove = () => {
   if ($.hoveredElement) {
     $.hoveredElement.style.removeProperty("transform");
   }
-  // grab the top most element under cursor
+  // grab the element under cursor, usually the most nested element
   $.hoveredElement = document.elementFromPoint($.mouseX, $.mouseY);
   // cursor probably left browser and we received negative coords
   if (!$.hoveredElement) return nextFrame();
+
+  // check if any parent element has the data-cursor attribute as that will take priority
+  // added this to prevent text based elements taking priority
+  /**
+   * e.g. div[data-cursor='fill'] > h1 > span
+   * It's likely the effect wants to be applied to the div here but the
+   * span would be picked up by elementFromPoint
+   */
+  const elementsFromPoint = document.elementsFromPoint($.mouseX, $.mouseY);
+  if (elementsFromPoint) {
+    for (const el of elementsFromPoint) {
+      // if anything we are hovering over has data-cursor then we set that as the hovered element
+      if (el.dataset["cursor"]) {
+        $.hoveredElement = el;
+        break;
+      }
+    }
+  }
+
   // handle fill cursor
   if ($.hoveredElement.dataset["cursor"] === "fill") {
     $.isCursorLocked = true;
