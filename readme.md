@@ -82,6 +82,8 @@ Set the `data-cursor` attribute to any element on the page to enable the fill or
 <button data-cursor="drag">Click me!</button>
 ```
 
+Set `data-cursor="reset"` to revert to a normal cursor for that element.
+
 #### Notes
 
 - Doesn't add `mouseenter` and `mouseleave` event listeners to every desireable element, this also means that a `MutationObserver` is not required to detect new elements added to the page and applying the necessary event listeners to them. Instead, a single `mousemove` event listener is added to the `document` and we find out what's underneath the cursor with `document.elementFromPoint`

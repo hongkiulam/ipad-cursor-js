@@ -4,6 +4,8 @@ const CONSTANTS = {
 
 /** @type {HTMLDivElement} */
 let cursor;
+/** @type {HTMLStyleElement} */
+let nativeCursorStyles;
 
 /**
  * Global App State
@@ -50,10 +52,14 @@ const load = () => {
     ].join(";")
   );
   // disable default cursor, add base cursor styles
-  const hideDefaultCursor = document.createElement("style");
-  document.head.appendChild(hideDefaultCursor);
-  hideDefaultCursor.innerText = `
- * {cursor: none;}
+  nativeCursorStyles = document.createElement("style");
+  nativeCursorStyles.id = "native-cursor-styles";
+  document.head.appendChild(nativeCursorStyles);
+  nativeCursorStyles.innerText = "*{ cursor:none ;}";
+
+  const customCursorStyles = document.createElement("style");
+  document.head.appendChild(customCursorStyles);
+  customCursorStyles.innerText = `
  #cursor {
    position:fixed;
    top:0;
@@ -116,7 +122,11 @@ const onCursorMove = () => {
       }
     }
   }
-
+  if ($.hoveredElement.dataset["cursor"] === "reset") {
+    $.isCursorLocked = false;
+    useNativeCursor();
+    return nextFrame();
+  }
   // handle fill cursor
   if ($.hoveredElement.dataset["cursor"] === "fill") {
     $.isCursorLocked = true;
@@ -139,6 +149,7 @@ const onCursorMove = () => {
   if ($.hoveredElement.tagName === "INPUT") {
     $.isCursorLocked = false;
     resetCursor();
+    hideNativeCursor();
     const textInputs = [
       "text",
       "email",
@@ -169,14 +180,29 @@ const resetCursor = () => {
   cursor.style.removeProperty("transition");
 };
 
+const hideNativeCursor = () => {
+  if (nativeCursorStyles.innerText !== "*{cursor: none;}") {
+    nativeCursorStyles.innerText = `*{cursor: none;}`;
+  }
+};
+
+const useNativeCursor = () => {
+  cursor.style.setProperty("opacity", 0);
+  nativeCursorStyles.innerText = ``;
+};
+
 const useGeneralCursor = () => {
   resetCursor();
+  hideNativeCursor();
+
   $.cursorWidth = $.baseCursorWidth;
   $.cursorHeight = $.baseCursorHeight;
   $.borderRadius = `calc(${$.baseCursorWidth} / 2)`;
 };
 
 const useFillCursor = () => {
+  hideNativeCursor();
+
   const {
     width: w,
     height: h,
@@ -223,6 +249,8 @@ const useFillCursor = () => {
 };
 
 const useDragCursor = () => {
+  hideNativeCursor();
+
   // shrink cursor, then hide with opacity
   const { width, height } = $.hoveredElement.getBoundingClientRect();
   $.cursorWidth = "5px";
@@ -240,6 +268,8 @@ const useDragCursor = () => {
 
 const useTextCursor = () => {
   resetCursor();
+  hideNativeCursor();
+
   const fontSize = window
     .getComputedStyle($.hoveredElement)
     .getPropertyValue("font-size");
