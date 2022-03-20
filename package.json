@@ -1,9 +1,8 @@
 {
   "name": "ipad-cursor-js",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "An iPadOS based cursor for the browser",
-  "main": "./index.js",
-  "module": "./index.mjs",
+  "main": "index.js",
   "keywords": [
     "ipad",
     "cursor",

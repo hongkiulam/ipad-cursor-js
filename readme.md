@@ -13,11 +13,22 @@ Demo [https://ipad-cursor-js.netlify.app/](https://ipad-cursor-js.netlify.app/)
 
 #### Installation
 
+_npm_
+
 ```bash
 npm install ipad-cursor-js
 ```
 
-Or from a CDN by adding this just above the closing body tag
+```html
+<body>
+  ...stuff
+  <script
+    type="text/javascript"
+    src="node_modules/ipad-cursor-js"
+  ></script>
+</body>
+```
+_CDN_
 
 ```html
 <body>
