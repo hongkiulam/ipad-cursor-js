@@ -19,8 +19,8 @@ const $ = {
   cursorHeight: "10px",
   borderRadius: "0px",
   // current mouse position on page
-  mouseX: 0,
-  mouseY: 0,
+  mouseX: undefined,
+  mouseY: undefined,
   /**@type {HTMLElement} */
   hoveredElement: null,
   // when true, cursor will stop following mouse position
@@ -28,6 +28,8 @@ const $ = {
 };
 
 const load = () => {
+  // start animation
+  requestAnimationFrame(onCursorMove);
   // dont want on mobile
   if ("ontouchstart" in window) {
     return;
@@ -41,22 +43,13 @@ const load = () => {
   $.cursorWidth = $.baseCursorWidth;
   $.cursorHeight = $.baseCursorHeight;
   $.borderRadius = `calc(${$.baseCursorWidth} / 2)`;
-  cursor.setAttribute(
-    "style",
-    [
-      `width:${$.cursorWidth}`,
-      `height:${$.cursorHeight}`,
-      `background:${cursor.dataset.bg || "gray"}`,
-      "opacity:0.5",
-      `border-radius: 50%`,
-    ].join(";")
-  );
   // disable default cursor, add base cursor styles
   nativeCursorStyles = document.createElement("style");
   nativeCursorStyles.id = "native-cursor-styles";
   document.head.appendChild(nativeCursorStyles);
   nativeCursorStyles.innerText = "*{ cursor:none ;}";
 
+  // apply styles to cursor
   const customCursorStyles = document.createElement("style");
   document.head.appendChild(customCursorStyles);
   customCursorStyles.innerText = `
@@ -64,6 +57,12 @@ const load = () => {
    position:fixed;
    top:0;
    left:0;
+   width: ${$.cursorWidth};
+   height: ${$.cursorHeight};
+   background:${cursor.dataset.bg || "gray"};
+   opacity: 0.5;
+   border-radius: 50%;
+   display: none;
    pointer-events:none;
    transition-timing-function: ease;
    transition: ${transition({
@@ -74,6 +73,7 @@ const load = () => {
    })};
    margin: 0px !important;
    padding: 0px !important;
+   z-index: 99999999;
  }`;
 
   // keep track of current mouse position on page
@@ -81,18 +81,19 @@ const load = () => {
     $.mouseX = e.clientX;
     $.mouseY = e.clientY;
   });
-  // start animation
-  requestAnimationFrame(onCursorMove);
 };
 
 // main cursor logic here
 const onCursorMove = () => {
   const nextFrame = () => requestAnimationFrame(onCursorMove);
   if (!cursor) return nextFrame();
+  // mouse hasn't moved yet
+  if ($.mouseX === undefined || $.mouseY === undefined) return nextFrame();
   // on every frame, we update the cursor based on our app state
   cursor.style.width = $.cursorWidth;
   cursor.style.height = $.cursorHeight;
   cursor.style.borderRadius = $.borderRadius;
+  cursor.style.display = "block";
   if (!$.isCursorLocked) {
     cursor.style.transform = `translate(calc(${$.mouseX}px - (${$.cursorWidth} / 2)), calc(${$.mouseY}px - (${$.cursorHeight} / 2))) `;
   }
